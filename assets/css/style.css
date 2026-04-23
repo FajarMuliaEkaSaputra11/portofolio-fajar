@@ -442,5 +442,30 @@ img:hover {
   margin-right: 6px;
 }
 
+.cv-section {
+  margin-top: 20px;
+}
 
+.btn-cv {
+  display: inline-block;
+  margin: 5px;
+  padding: 10px 18px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: white;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.btn-cv.view {
+  background-color: #3b82f6;
+}
+
+.btn-cv.download {
+  background-color: #ca1212;
+}
+
+.btn-cv:hover {
+  opacity: 0.8;
+}
 

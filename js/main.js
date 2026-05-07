@@ -1,5 +1,33 @@
 // assets/js/main.js
 
+// Navbar toggle functions for mobile hamburger
+function toggleMenu() {
+  const nav = document.getElementById('navLinks');
+  if (!nav) return;
+  const isOpen = nav.classList.toggle('open');
+  console.log('toggleMenu called, isOpen=', isOpen);
+  const icon = document.querySelector('.hamburger i');
+  const hamb = document.querySelector('.hamburger');
+  if (icon) {
+    icon.classList.toggle('fa-bars');
+    icon.classList.toggle('fa-xmark');
+  }
+  if (hamb) hamb.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+
+function closeMenu() {
+  const nav = document.getElementById('navLinks');
+  if (!nav) return;
+  if (nav.classList.contains('open')) nav.classList.remove('open');
+  const icon = document.querySelector('.hamburger i');
+  const hamb = document.querySelector('.hamburger');
+  if (icon) {
+    icon.classList.remove('fa-xmark');
+    icon.classList.add('fa-bars');
+  }
+  if (hamb) hamb.setAttribute('aria-expanded', 'false');
+}
+
 // smooth scroll untuk link navbar
 document.querySelectorAll('a[href^="#"]').forEach(link => {
   link.addEventListener('click', function (e) {
@@ -12,6 +40,64 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     });
   });
 });
+
+// Ensure hamburger and nav links work even if inline handlers fail
+document.addEventListener('DOMContentLoaded', () => {
+  const hamb = document.querySelector('.hamburger');
+  if (hamb) {
+    hamb.addEventListener('click', toggleMenu);
+    hamb.setAttribute('aria-expanded', 'false');
+    hamb.setAttribute('role', 'button');
+    hamb.setAttribute('aria-label', 'Toggle navigation');
+    console.log('hamburger initialized', hamb);
+  } else {
+    console.log('hamburger element NOT found');
+  }
+
+  const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+  navAnchors.forEach(a => {
+    a.addEventListener('click', () => {
+      // close mobile menu after clicking a nav link
+      closeMenu();
+    });
+  });
+});
+
+// Show clock in header on small screens (replace hamburger visually)
+function ensureMobileClock() {
+  const container = document.querySelector('.nav-content');
+  if (!container) return;
+  const existing = container.querySelector('.mobile-clock');
+  if (window.innerWidth <= 900) {
+    // hide hamburger visually (we may still keep it in DOM)
+    const hamb = container.querySelector('.hamburger');
+    if (hamb) hamb.style.display = 'none';
+
+    if (!existing) {
+      const clockSrc = document.getElementById('clock');
+      const clone = document.createElement('div');
+      clone.className = 'clock-badge mobile-clock';
+      clone.style.marginLeft = '0';
+      clone.textContent = clockSrc ? clockSrc.textContent : '--:-- WIB';
+      container.appendChild(clone);
+    }
+  } else {
+    // restore hamburger
+    const hamb = container.querySelector('.hamburger');
+    if (hamb) hamb.style.display = '';
+    if (existing) existing.remove();
+  }
+}
+
+// Keep mobile clock in sync with main clock
+function updateMobileClockText(text) {
+  const mobile = document.querySelector('.mobile-clock');
+  if (mobile) mobile.textContent = text;
+}
+
+// run on load and resize
+window.addEventListener('resize', ensureMobileClock);
+document.addEventListener('DOMContentLoaded', ensureMobileClock);
 
 
 // Marquee certificates: ensure seamless, non-stuttering loop

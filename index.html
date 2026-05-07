@@ -42,6 +42,7 @@
         <a href="#contact" onclick="closeMenu()">Contact</a>
         <div id="clock" class="clock-badge" style="color: var(--text-muted); font-size: 12px; margin-left: 10px;">--:-- WIB</div>
       </nav>
+    </div>
   </header>
 
   <!-- HERO SECTION -->
@@ -246,7 +247,7 @@
     </div>
   </footer>
 
-  <script src="/js/main.js"></script>
+  <script src="js/main.js"></script>
   <script>
   function updateClock() {
     const clock = document.getElementById("clock");
@@ -258,7 +259,11 @@
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
 
-    clock.textContent = `${hours}:${minutes}:${seconds} WIB`;
+    const timeText = `${hours}:${minutes}:${seconds} WIB`;
+    clock.textContent = timeText;
+    // also update mobile clock if present
+    const mobile = document.querySelector('.mobile-clock');
+    if (mobile) mobile.textContent = timeText;
   }
 
   // Jalankan langsung saat halaman load
